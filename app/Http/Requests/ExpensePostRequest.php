@@ -14,8 +14,7 @@ class ExpensePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'amount'   => 'required|numeric|min:1',
-            'status_id'   => 'required|exists:statuses,id'
+            'amount'   => 'required|numeric|min:1'
         ];
     }
 }

@@ -18,4 +18,21 @@ class Expense extends Model
     {
         return $this->hasMany(Approval::class);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($expense) {
+            if (is_null($expense->status_id)) {
+                $defaultStatus = Status::where('is_default', true)->first();
+
+                if (! $defaultStatus) {
+                    throw new \Exception("No default status found. Please insert a status with is_default = true.");
+                }
+
+                $expense->status_id = $defaultStatus->id;
+            }
+        });
+    }
 }

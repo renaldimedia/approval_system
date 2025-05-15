@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ApproversPostRequestPostRequest extends FormRequest
+class ApproverPostRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -13,8 +13,10 @@ class ApproversPostRequestPostRequest extends FormRequest
     
     public function rules(): array
     {
+        \Log::info('ApproverPostRequest rules called');
+
         return [
-            'name'   => 'required|string|max:255'
+            'name'   => 'required|string|max:255|unique:App\Models\Approver,name'
         ];
     }
 }

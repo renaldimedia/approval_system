@@ -14,7 +14,6 @@ class ApprovalPostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'expense_id'  => 'required|exists:expenses,id',
             'approver_id' => 'required|exists:approvers,id',
             'status_id'   => 'required|exists:statuses,id',
         ];

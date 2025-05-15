@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 
-class ApprovalStagePostRequest extends FormRequest
+class ApprovalStagePutRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -18,7 +18,6 @@ class ApprovalStagePostRequest extends FormRequest
         return [
             'approver_id' => [
                 'required',
-                'numeric',
                 'exists:approvers,id',
                 Rule::unique('approval_stages')->ignore($this->route('id'))
             ]

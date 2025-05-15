@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 
-class ApprovalStagePostRequest extends FormRequest
+class ExpensePutRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -16,11 +16,10 @@ class ApprovalStagePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'approver_id' => [
+             'approver_id' => [
                 'required',
-                'numeric',
                 'exists:approvers,id',
-                Rule::unique('approval_stages')->ignore($this->route('id'))
+                Rule::unique('approvals')->ignore($this->route('id'))
             ]
         ];
     }
