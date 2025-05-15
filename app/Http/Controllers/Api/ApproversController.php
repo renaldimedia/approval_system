@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+/**
+ * @OA\Info(
+ *     title="Ardi API",
+ *     version="1.0.0"
+ * )
+ */
+
 use App\Http\Requests\ApproverPostRequest;
 use App\Services\ApproversService;
 use Illuminate\Routing\Controller as BaseController;
@@ -36,6 +43,26 @@ class ApproversController extends BaseController
             $approvers = $this->service->create($request->validated());
              
             return response()->json(['data' => $approvers], 201);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+     /**
+     * @OA\Get(
+     *     path="/api/approvers",
+     *     tags={"Approvers"},
+     *     summary="Get list approvers",
+     *     @OA\Response(response=200, description="successfully getting approvers data")
+     * )
+     */
+
+    function list()
+    {
+        try {
+            $approvers = $this->service->list();
+
+            return response()->json(['message' => "Data retrieved", 'data' => $approvers], 200);
         } catch (\Throwable $th) {
             throw $th;
         }

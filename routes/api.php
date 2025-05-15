@@ -27,4 +27,5 @@ Route::post('/approval-stages', [ApprovalStagesController::class, 'store']);
 Route::put('/approval-stages/{id}', [ApprovalStagesController::class, 'update']);
 Route::post('/expense', [ExpensesController::class, 'store']);
 Route::get('/expense', [ExpensesController::class, 'list']);
+Route::get('/expense/{id}', [ExpensesController::class, 'show']);
 Route::patch('/expense/{id}/approve', [ExpensesController::class, 'approve']);

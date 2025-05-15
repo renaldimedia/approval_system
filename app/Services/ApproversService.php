@@ -10,4 +10,9 @@ class ApproversService
     {
         return Approver::create($data);
     }
+
+    public function list()
+    {
+        return Approver::all();
+    }
 }

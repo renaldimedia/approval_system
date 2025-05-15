@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+/**
+ * @OA\Info(
+ *     title="Ardi API",
+ *     version="1.0.0"
+ * )
+ */
+
 use App\Http\Requests\ApprovalStagePostRequest;
 use App\Http\Requests\ApprovalStagePutRequest;
 
@@ -27,7 +34,7 @@ class ApprovalStagesController extends BaseController
      *             @OA\Property(property="approver_id", type="integer", example=1, description="ID must exists in table approver")
      *         )
      *     ),
-     *     @OA\Response(response=201, description="approver created")
+     *     @OA\Response(response=201, description="approver created"),
      *     @OA\Response(response=422, description="Validation error")
      * )
      */
@@ -38,7 +45,7 @@ class ApprovalStagesController extends BaseController
             //code...
             $ApprovalStages = $this->service->create($request->validated());
 
-            return response()->json(['message' => "Approver created"], 201);
+            return response()->json(['message' => "Approver created", 'data' => $ApprovalStages], 201);
         } catch (\Throwable $th) {
             throw $th;
         }

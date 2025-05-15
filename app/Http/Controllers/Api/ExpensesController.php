@@ -1,6 +1,14 @@
 <?php
 
+
 namespace App\Http\Controllers\Api;
+
+/**
+ * @OA\Info(
+ *     title="Ardi API",
+ *     version="1.0.0"
+ * )
+ */
 
 use App\Http\Requests\ApprovalPostRequest;
 use App\Http\Requests\ExpensePostRequest;
@@ -16,11 +24,32 @@ class ExpensesController extends BaseController
 {
     public function __construct(private ExpensesService $service) {}
 
+
+     /**
+     * @OA\Get(
+     *     path="/api/expense/{id}",
+     *     tags={"Expenses"},
+     *     summary="Get detail expense",
+     *     @OA\Response(response=200, description="successfully getting expenses data")
+     * )
+     */
+
+    function show($id)
+    {
+        try {
+            $Expense = $this->service->show($id);
+
+            return response()->json(['message' => "Data retrieved", 'data' => $Expense], 200);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
      /**
      * @OA\Get(
      *     path="/api/expense",
      *     tags={"Expenses"},
-     *     summary="Get list expenses"
+     *     summary="Get list expenses",
      *     @OA\Response(response=200, description="successfully getting expenses data")
      * )
      */
@@ -49,7 +78,7 @@ class ExpensesController extends BaseController
      *             @OA\Property(property="amount", type="integer", example=1000, description="Amount is required")
      *         )
      *     ),
-     *     @OA\Response(response=201, description="expense created")
+     *     @OA\Response(response=201, description="expense created"),
      *     @OA\Response(response=422, description="Validation error")
      * )
      */
@@ -60,7 +89,7 @@ class ExpensesController extends BaseController
             //code...
             $Expensess = $this->service->create($request->validated());
 
-            return response()->json(['message' => "Expenses created"], 201);
+            return response()->json(['message' => "Expenses created", 'data' => $Expensess], 201);
         } catch (\Throwable $th) {
             throw $th;
         }

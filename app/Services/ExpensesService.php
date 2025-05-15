@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Models\Expense;
-use App\Models\Approver;
+use App\Models\Status;
 use App\Models\Approval;
+use App\Models\ApprovalStage;
 use Illuminate\Support\Facades\DB;
 
 
@@ -18,6 +19,11 @@ class ExpensesService
         return Expense::all("*");
     }
 
+    public function show($id): Expense
+    {
+        return Expense::findOrFail($id);
+    }
+
     public function create(array $data): Expense
     {
         return Expense::create($data);
@@ -27,8 +33,8 @@ class ExpensesService
     {
         $expense = Expense::findOrFail($id);
 
-        // Ambil semua approver ID dalam urutan
-        $allApprovers = Approver::orderBy('id')->pluck('id')->values();
+        // Ambil semua approver ID dalam urutan di approval stage
+        $allApprovers = ApprovalStage::orderBy('id')->pluck('approver_id')->values();
 
         // Ambil semua approval yang sudah ada untuk expense ini
         $existingApprovers = Approval::where('expense_id', $id)
@@ -50,6 +56,23 @@ class ExpensesService
             'approver_id'  => $data['approver_id'],
             'status_id'    => $data['status_id'], // harus disediakan di $data
         ]);
+
+
+        // Hitung jumlah approval stage & approval existing
+        $totalStages = ApprovalStage::count();
+        $approvedCount = Approval::where('expense_id', $id)->count();
+
+        // Jika semua tahap sudah disetujui, ubah status expense
+        if ($approvedCount >= $totalStages) {
+            $statusApproved = Status::where('name', 'Disetujui')->first();
+            if (!$statusApproved) {
+                throw new \Exception('Status Disetujui tidak ditemukan');
+            }
+
+            $expense = Expense::findOrFail($id);
+            $expense->status_id = $statusApproved->id;
+            $expense->save();
+        }
 
         return $approval;
     }
